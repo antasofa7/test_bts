@@ -1,68 +1,46 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_apps/cubit/auth_cubit.dart';
-import 'package:my_apps/pages/homepage.dart';
-import 'package:my_apps/pages/register_page.dart';
-import 'package:my_apps/services/user_service.dart';
+import 'package:my_apps/cubit/register_cubit.dart';
+import 'package:my_apps/pages/login_page.dart';
 import 'package:my_apps/widgets/button.dart';
 import 'package:my_apps/widgets/input_field.dart';
 
-class LoginPage extends StatefulWidget {
-  static const String routeName = '/login';
+class RegisterPage extends StatefulWidget {
+  static const String routeName = '/register';
 
-  const LoginPage({super.key});
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<RegisterPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  @override
-  void initState() {
-    Timer(
-      const Duration(milliseconds: 1500),
-      () async {
-        bool? isLoggedIn = await UserService().checkLogin();
-        if (isLoggedIn!) {
-          if (!mounted) return;
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            HomePage.routeName,
-            (route) => false,
-          );
-        }
-      },
-    );
-    super.initState();
-  }
+  final TextEditingController _usernameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: BlocConsumer<AuthCubit, AuthState>(listener: (context, state) {
-          if (state is AuthSuccess) {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              HomePage.routeName,
-              (route) => false,
-            );
-          } else if (state is AuthErrors) {
+        body: BlocConsumer<RegisterCubit, RegisterState>(
+            listener: (context, state) {
+          if (state is RegisterSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-                state.errors.errorMessage ?? '',
+                state.register.message ?? '',
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
-              backgroundColor: Theme.of(context).colorScheme.error,
+              backgroundColor: Theme.of(context).colorScheme.primary,
             ));
-          } else if (state is AuthFailed) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              LoginPage.routeName,
+              (route) => false,
+            );
+          } else if (state is RegisterFailed) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
                 state.errorMessage,
@@ -73,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
           }
         }, builder: (context, state) {
           Widget widgetLoading = const SizedBox();
-          if (state is AuthLoading) {
+          if (state is RegisterLoading) {
             widgetLoading = Container(
               height: double.infinity,
               width: double.infinity,
@@ -92,8 +70,7 @@ class _LoginPageState extends State<LoginPage> {
           return Stack(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 40.0, horizontal: 16.0),
+                padding: const EdgeInsets.fromLTRB(16.0, 40.0, 16.0, 24.0),
                 child: SingleChildScrollView(
                   child: Column(children: [
                     Text(
@@ -108,21 +85,18 @@ class _LoginPageState extends State<LoginPage> {
                       width: MediaQuery.of(context).size.width - 120.0,
                     ),
                     const SizedBox(
-                      height: 16.0,
+                      height: 8.0,
                     ),
                     Form(
                         key: _formKey,
                         child: Column(
                           children: [
                             InputField(
-                              label: 'Username',
+                              label: 'Email address',
                               inputType: TextInputType.emailAddress,
                               suffixIcon: false,
-                              controller: _usernameController,
+                              controller: _emailController,
                               helperText: '',
-                            ),
-                            const SizedBox(
-                              height: 8.0,
                             ),
                             InputField(
                               label: 'Password',
@@ -131,28 +105,36 @@ class _LoginPageState extends State<LoginPage> {
                               controller: _passwordController,
                               helperText: '',
                             ),
+                            InputField(
+                              label: 'Username',
+                              inputType: TextInputType.text,
+                              suffixIcon: false,
+                              controller: _usernameController,
+                              helperText: '',
+                            ),
                             const SizedBox(
                               height: 32.0,
                             ),
                             ButtonWidget(
-                                label: 'LOGIN',
+                                label: 'REGISTER',
                                 onPress: () {
                                   if (_formKey.currentState!.validate()) {
-                                    context.read<AuthCubit>().login(
-                                        username: _usernameController.text,
-                                        password: _passwordController.text);
+                                    context.read<RegisterCubit>().register(
+                                        email: _emailController.text,
+                                        password: _passwordController.text,
+                                        username: _usernameController.text);
                                   }
                                 }),
                             const SizedBox(
                               height: 20.0,
                             ),
                             ButtonWidget(
-                                label: 'REGISTER',
+                                label: 'LOGIN',
                                 outlined: true,
                                 onPress: () =>
                                     Navigator.pushNamedAndRemoveUntil(
                                       context,
-                                      RegisterPage.routeName,
+                                      LoginPage.routeName,
                                       (route) => false,
                                     ))
                           ],

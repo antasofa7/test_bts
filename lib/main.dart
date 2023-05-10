@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:my_apps/cubit/articles_cubit.dart';
 import 'package:my_apps/cubit/auth_cubit.dart';
-import 'package:my_apps/pages/dashboard.dart';
+import 'package:my_apps/cubit/register_cubit.dart';
+import 'package:my_apps/pages/homepage.dart';
 import 'package:my_apps/pages/login_page.dart';
+import 'package:my_apps/pages/register_page.dart';
 import 'package:my_apps/theme.dart';
 
 void main() {
@@ -25,8 +26,8 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthCubit(),
         ),
         BlocProvider(
-          create: (context) => ArticlesCubit(),
-        )
+          create: (context) => RegisterCubit(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -34,7 +35,8 @@ class MyApp extends StatelessWidget {
         initialRoute: LoginPage.routeName,
         routes: {
           LoginPage.routeName: (context) => const LoginPage(),
-          Dashboard.routeName: (context) => const Dashboard()
+          RegisterPage.routeName: (context) => const RegisterPage(),
+          HomePage.routeName: (context) => const HomePage()
         },
       ),
     );

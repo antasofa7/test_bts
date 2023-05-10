@@ -3,26 +3,26 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserService {
   late final SharedPreferences prefs;
 
-  static const String localUserData = 'LOCAL_USER_DATA';
+  static const String token = 'TOKEN';
 
-  Future<void> setLocalUser(String value) async {
+  Future<void> setToken(String value) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(localUserData, value);
+    prefs.setString(token, value);
   }
 
-  Future<String> getLocalUser() async {
+  Future<String> getToken() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(localUserData) ?? '';
+    return prefs.getString(token) ?? '';
   }
 
   Future<bool?> checkLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    var user = prefs.containsKey(localUserData);
+    var user = prefs.containsKey(token);
     return user;
   }
 
   Future<void> removeLocalUser() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.remove(localUserData);
+    prefs.remove(token);
   }
 }

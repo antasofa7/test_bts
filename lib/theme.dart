@@ -29,8 +29,10 @@ final themeData = ThemeData(
     textTheme: const TextTheme(
       headlineLarge:
           TextStyle(fontFamily: 'Inter', fontWeight: bold, color: primaryColor),
+      headlineMedium:
+          TextStyle(fontFamily: 'Inter', fontWeight: bold, color: primaryColor),
       headlineSmall: TextStyle(
-          fontFamily: 'Inter', fontWeight: semiBold, color: neutral900),
+          fontFamily: 'Inter', fontWeight: semiBold, color: primaryColor),
       titleSmall: TextStyle(
           fontFamily: 'Inter', fontWeight: semiBold, color: primaryColor),
       bodyLarge: TextStyle(

@@ -1,23 +1,20 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:my_apps/models/error_auth_model.dart';
+import 'package:my_apps/models/auth_model.dart';
 import 'package:my_apps/services/auth_service.dart';
 import 'package:my_apps/services/user_service.dart';
-
-import '../models/users_model.dart';
 
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
-  void login({required String email, required String password}) async {
+  void login({required String username, required String password}) async {
     try {
       emit(AuthLoading());
-      dynamic res = await AuthService().login(email: email, password: password);
-      if (res.status) {
+      final res =
+          await AuthService().login(username: username, password: password);
+      if (res.errorMessage == '') {
         emit(AuthSuccess(res));
       } else {
         emit(AuthErrors(res));
@@ -37,11 +34,11 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void getCurrentUser() async {
+  void isLoggedIn() async {
     try {
-      String currentUser = await UserService().getLocalUser();
-      UsersModel user = UsersModel.fromJson(jsonDecode(currentUser));
-      emit(AuthSuccess(user));
+      String token = await UserService().getToken();
+      // var user = SuccessAuthModel.fromJson(jsonDecode(token));
+      emit(IsAuthenticated(token));
     } catch (e) {
       emit(AuthFailed(e.toString()));
     }

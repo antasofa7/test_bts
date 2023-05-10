@@ -1,31 +1,52 @@
 import 'dart:convert';
 
-import 'package:my_apps/models/error_auth_model.dart';
-import 'package:my_apps/models/users_model.dart';
+import 'package:my_apps/models/auth_model.dart';
+import 'package:my_apps/models/register_model.dart';
 import 'package:my_apps/services/user_service.dart';
 import 'package:my_apps/utils/constans.dart';
 import 'package:http/http.dart' as http;
 
-const String _endPoint = 'auth/login';
-const String _url = baseUrl + _endPoint;
-
 class AuthService {
-  Future<dynamic> login(
-      {required String email, required String password}) async {
+  Future<dynamic> register(
+      {required String email,
+      required String password,
+      required String username}) async {
     try {
-      var body = {'email': email, 'password': password};
+      var body = {"email": email, "password": password, "username": username};
 
-      var response = await http.post(Uri.parse(_url),
-          headers: {
-            "Authorization": 'Bearer $token',
+      final response = await http.post(Uri.parse('${baseUrl}register'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
           },
-          body: body);
+          body: jsonEncode(body));
 
       if (response.statusCode == 200) {
-        UserService().setLocalUser(response.body);
-        return UsersModel.fromJson(jsonDecode(response.body));
+        return RegisterModel.fromJson(jsonDecode(response.body));
       } else if (response.statusCode == 400) {
-        return ErrorAuthModel.fromJson(jsonDecode(response.body));
+        return RegisterModel.fromJson(jsonDecode(response.body));
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> login(
+      {required String username, required String password}) async {
+    try {
+      var body = {'username': username, 'password': password};
+
+      var response = await http.post(Uri.parse('${baseUrl}login'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(body));
+
+      if (response.statusCode == 200) {
+        var model = AuthModel.fromJson(jsonDecode(response.body));
+        UserService().setToken(model.data?.token! ?? '');
+        return model;
+      } else {
+        return AuthModel.fromJson(jsonDecode(response.body));
       }
     } catch (e) {
       rethrow;

@@ -12,7 +12,7 @@ class AuthInitial extends AuthState {}
 class AuthLoading extends AuthState {}
 
 class AuthSuccess extends AuthState {
-  final UsersModel users;
+  final AuthModel users;
 
   const AuthSuccess(this.users);
 
@@ -20,8 +20,17 @@ class AuthSuccess extends AuthState {
   List<Object> get props => [users];
 }
 
+class IsAuthenticated extends AuthState {
+  final String token;
+
+  const IsAuthenticated(this.token);
+
+  @override
+  List<Object> get props => [token];
+}
+
 class AuthErrors extends AuthState {
-  final ErrorAuthModel errors;
+  final AuthModel errors;
 
   const AuthErrors(this.errors);
 

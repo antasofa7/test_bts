@@ -28,7 +28,7 @@ class _InputFieldState extends State<InputField> {
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6.0),
-        color: Theme.of(context).colorScheme.primaryContainer,
+        // color: Theme.of(context).colorScheme.primaryContainer,
       ),
       child: widget.suffixIcon
           ? TextFormField(
@@ -45,9 +45,6 @@ class _InputFieldState extends State<InputField> {
               style: Theme.of(context).textTheme.bodyMedium,
               cursorHeight: 24.0,
               decoration: InputDecoration(
-                  border: InputBorder.none,
-                  filled: true,
-                  fillColor: Theme.of(context).colorScheme.primaryContainer,
                   labelText: widget.label,
                   labelStyle: Theme.of(context).textTheme.labelLarge,
                   floatingLabelAlignment: FloatingLabelAlignment.start,
@@ -76,9 +73,6 @@ class _InputFieldState extends State<InputField> {
               style: Theme.of(context).textTheme.bodyMedium,
               cursorHeight: 24.0,
               decoration: InputDecoration(
-                border: InputBorder.none,
-                filled: true,
-                fillColor: Theme.of(context).colorScheme.primaryContainer,
                 labelText: widget.label,
                 labelStyle: Theme.of(context).textTheme.labelLarge,
                 floatingLabelAlignment: FloatingLabelAlignment.start,
