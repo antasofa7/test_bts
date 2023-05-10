@@ -12,12 +12,12 @@ class AuthCubit extends Cubit<AuthState> {
   void login({required String username, required String password}) async {
     try {
       emit(AuthLoading());
-      final res =
+      final response =
           await AuthService().login(username: username, password: password);
-      if (res.errorMessage == '') {
-        emit(AuthSuccess(res));
+      if (response.errorMessage == '') {
+        emit(AuthSuccess(response));
       } else {
-        emit(AuthErrors(res));
+        emit(AuthErrors(response));
       }
     } catch (e) {
       emit(AuthFailed(e.toString()));

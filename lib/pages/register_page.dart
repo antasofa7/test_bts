@@ -22,6 +22,14 @@ class _LoginPageState extends State<RegisterPage> {
   final TextEditingController _usernameController = TextEditingController();
 
   @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    _usernameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -97,13 +105,16 @@ class _LoginPageState extends State<RegisterPage> {
                               suffixIcon: false,
                               controller: _emailController,
                               helperText: '',
+                              inputAction: TextInputAction.next,
                             ),
                             InputField(
                               label: 'Password',
                               inputType: TextInputType.visiblePassword,
+                              passwordField: true,
                               suffixIcon: true,
                               controller: _passwordController,
                               helperText: '',
+                              inputAction: TextInputAction.next,
                             ),
                             InputField(
                               label: 'Username',

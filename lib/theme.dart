@@ -24,7 +24,7 @@ final themeData = ThemeData(
         secondary: secondaryColor,
         background: neutral100,
         onPrimaryContainer: neutral900,
-        outline: neutral900,
+        outline: neutral500,
         error: danger),
     textTheme: const TextTheme(
       headlineLarge:

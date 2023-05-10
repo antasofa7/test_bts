@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_apps/cubit/auth_cubit.dart';
-import 'package:my_apps/pages/homepage.dart';
+import 'package:my_apps/pages/home_page.dart';
 import 'package:my_apps/pages/register_page.dart';
 import 'package:my_apps/services/user_service.dart';
 import 'package:my_apps/widgets/button.dart';
@@ -41,6 +41,13 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -120,6 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                               suffixIcon: false,
                               controller: _usernameController,
                               helperText: '',
+                              inputAction: TextInputAction.next,
                             ),
                             const SizedBox(
                               height: 8.0,
@@ -127,6 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                             InputField(
                               label: 'Password',
                               inputType: TextInputType.visiblePassword,
+                              passwordField: true,
                               suffixIcon: true,
                               controller: _passwordController,
                               helperText: '',
